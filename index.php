@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/database.php";
+require_once __DIR__ . "/department.php";
 
 // Query per il database
 
@@ -42,7 +43,7 @@ if ($result && $result->num_rows > 0) {
             <a href=""> Vedi informazioni</a>
         </div>
     <?php } ?>
-    ?>
+
 </body>
 
 </html>
