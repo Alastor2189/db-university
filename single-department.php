@@ -2,6 +2,24 @@
 require_once __DIR__ . "/database.php";
 require_once __DIR__ . "/department.php";
 
+$id = $_GET["id"];
+$sql = "SELECT * FROM `departments` WHERE `id`=$id;";
+$result = $conn->query($sql);
+$departments = [];
+
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $curr_department = new Department($row["id"], $row["name"]);
+        $curr_department->departmentInfo($row["address"], $row["phone"], $row["email"], $row["website"]);
+        $departments[] = $curr_department;
+    }
+} elseif ($result) {
+    echo "Il dipartimento non è stato trovato";
+} else {
+    echo "Query error";
+    die();
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -16,14 +34,18 @@ require_once __DIR__ . "/department.php";
 
 <body>
 
-    <h1>[Nome dipartimento]</h1>
-    <p>[head of department]</p>
-    <h2>[Contatti]</h2>
-    <ul>
-        <li>
+    <?php foreach ($departments as $department) { ?>
+        <h1><?php echo $department->name; ?></h1>
+        <p><?php echo $department->head_of_department; ?></p>
+        <h2>[Contatti]</h2>
+        <ul>
+            <?php foreach ($department->getDepartmentInfo() as $key => $value) { ?>
+                <li><?php echo "$key: $value" ?></li>
+            <?php } ?>
+        </ul>
+    <?php } ?>
 
-        </li>
-    </ul>
+
 
 
 </body>
